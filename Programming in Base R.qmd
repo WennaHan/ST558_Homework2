@@ -192,7 +192,7 @@ sum_fun <- function (data_list, stat = "mean"){
                                 sep = "_")
   names(sum_placebo) <- paste(stat, "placebo", c("pre", "post","diff"),
                               sep = "_")
-  sum <- list(sum_treatment = sum_treatment, sum_placebo = sum_placebo)
+  sum <- list(sum_treatment, sum_placebo)
   names(sum) <- c(paste(stat, "treatment", sep = "_"), 
                   paste(stat, "placebo", sep = "_"))
   sum
