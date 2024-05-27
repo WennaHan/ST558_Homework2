@@ -183,11 +183,11 @@ Continue the previous example. Suppose you would eventually have many datasets i
 sum_fun <- function (data_list, stat = "mean"){
   my_fun <- get(stat)
   sum_treatment <- c(my_fun(data_list$treatment$pre_bp),
-                        my_fun(data_list$treatment$post_bp),
-                        my_fun(data_list$treatment$diff_bp))
+                     my_fun(data_list$treatment$post_bp),
+                     my_fun(data_list$treatment$diff_bp))
   sum_placebo <- c(my_fun(data_list$placebo$pre_bp),
-                      my_fun(data_list$placebo$post_bp),
-                      my_fun(data_list$placebo$diff_bp))
+                   my_fun(data_list$placebo$post_bp),
+                   my_fun(data_list$placebo$diff_bp))
   names(sum_treatment) <- paste(stat, "treatment", c("pre","post","diff"),
                                 sep = "_")
   names(sum_placebo) <- paste(stat, "placebo", c("pre", "post","diff"),
