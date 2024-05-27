@@ -688,7 +688,7 @@ $placebo
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (bp_list<span class="sc">$</span>placebo[i,<span class="dv">3</span>]<span class="sc">&gt;</span><span class="dv">130</span>){</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    bp_list<span class="sc">$</span>placebo[i,<span class="dv">6</span>] <span class="ot">=</span> <span class="st">"high"</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span> <span class="cf">if</span> (bp_list[[<span class="dv">1</span>]][i,<span class="dv">3</span>]<span class="sc">&gt;</span><span class="dv">120</span>){</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span> <span class="cf">if</span> (bp_list<span class="sc">$</span>placebo[i,<span class="dv">3</span>]<span class="sc">&gt;</span><span class="dv">120</span>){</span>
 <span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    bp_list<span class="sc">$</span>placebo[i,<span class="dv">6</span>] <span class="ot">=</span> <span class="st">"border line"</span></span>
 <span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
 <span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    bp_list<span class="sc">$</span>placebo[i,<span class="dv">6</span>] <span class="ot">=</span> <span class="st">"optimal"</span></span>
@@ -696,17 +696,17 @@ $placebo
 <span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>bp_list<span class="sc">$</span>placebo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      patient pre_bp post_bp diff_bp post_less_120  status
-1   Subject_1    138     105      33          TRUE optimal
-2   Subject_2    135     136      -1         FALSE    high
-3   Subject_3    147     123      24         FALSE optimal
-4   Subject_4    117     130     -13         FALSE optimal
-5   Subject_5    152     134      18         FALSE    high
-6   Subject_6    134     143      -9         FALSE    high
-7   Subject_7    114     135     -21         FALSE    high
-8   Subject_8    121     139     -18         FALSE    high
-9   Subject_9    131     120      11         FALSE optimal
-10 Subject_10    130     124       6         FALSE optimal</code></pre>
+<pre><code>      patient pre_bp post_bp diff_bp post_less_120      status
+1   Subject_1    138     105      33          TRUE     optimal
+2   Subject_2    135     136      -1         FALSE        high
+3   Subject_3    147     123      24         FALSE border line
+4   Subject_4    117     130     -13         FALSE border line
+5   Subject_5    152     134      18         FALSE        high
+6   Subject_6    134     143      -9         FALSE        high
+7   Subject_7    114     135     -21         FALSE        high
+8   Subject_8    121     139     -18         FALSE        high
+9   Subject_9    131     120      11         FALSE     optimal
+10 Subject_10    130     124       6         FALSE border line</code></pre>
 </div>
 </div>
 </section>
@@ -725,18 +725,21 @@ $placebo
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>sum_fun <span class="ot">&lt;-</span> <span class="cf">function</span> (data_list, <span class="at">stat =</span> <span class="st">"mean"</span>){</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  my_fun <span class="ot">&lt;-</span> <span class="fu">get</span>(stat)</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  my_sum <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">my_fun</span>(data_list<span class="sc">$</span>treatment<span class="sc">$</span>pre_bp), </span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">my_fun</span>(data_list<span class="sc">$</span>treatment<span class="sc">$</span>post_bp),</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">my_fun</span>(data_list<span class="sc">$</span>treatment<span class="sc">$</span>diff_bp),</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">my_fun</span>(data_list<span class="sc">$</span>placebo<span class="sc">$</span>pre_bp), </span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">my_fun</span>(data_list<span class="sc">$</span>placebo<span class="sc">$</span>post_bp),</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>              <span class="fu">my_fun</span>(data_list<span class="sc">$</span>placebo<span class="sc">$</span>diff_bp))</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  my_name <span class="ot">&lt;-</span> <span class="fu">vector</span>()</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  my_name[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">paste</span>(stat, <span class="st">"treatment"</span>, <span class="fu">c</span>(<span class="st">"pre"</span>, <span class="st">"post"</span>,<span class="st">"diff"</span>), <span class="at">sep =</span> <span class="st">"_"</span>)</span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  my_name[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>] <span class="ot">&lt;-</span> <span class="fu">paste</span>(stat, <span class="st">"placebo"</span>, <span class="fu">c</span>(<span class="st">"pre"</span>, <span class="st">"post"</span>,<span class="st">"diff"</span>), <span class="at">sep =</span> <span class="st">"_"</span>)</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(my_sum) <span class="ot">&lt;-</span> my_name</span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  my_sum</span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  sum_treatment <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">my_fun</span>(data_list<span class="sc">$</span>treatment<span class="sc">$</span>pre_bp),</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">my_fun</span>(data_list<span class="sc">$</span>treatment<span class="sc">$</span>post_bp),</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">my_fun</span>(data_list<span class="sc">$</span>treatment<span class="sc">$</span>diff_bp))</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  sum_placebo <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">my_fun</span>(data_list<span class="sc">$</span>placebo<span class="sc">$</span>pre_bp),</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">my_fun</span>(data_list<span class="sc">$</span>placebo<span class="sc">$</span>post_bp),</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">my_fun</span>(data_list<span class="sc">$</span>placebo<span class="sc">$</span>diff_bp))</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(sum_treatment) <span class="ot">&lt;-</span> <span class="fu">paste</span>(stat, <span class="st">"treatment"</span>, <span class="fu">c</span>(<span class="st">"pre"</span>,<span class="st">"post"</span>,<span class="st">"diff"</span>),</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>                                <span class="at">sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(sum_placebo) <span class="ot">&lt;-</span> <span class="fu">paste</span>(stat, <span class="st">"placebo"</span>, <span class="fu">c</span>(<span class="st">"pre"</span>, <span class="st">"post"</span>,<span class="st">"diff"</span>),</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>                              <span class="at">sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  sum <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">sum_treatment =</span> sum_treatment, <span class="at">sum_placebo =</span> sum_placebo)</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(sum) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste</span>(stat, <span class="st">"treatment"</span>, <span class="at">sep =</span> <span class="st">"_"</span>), </span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">paste</span>(stat, <span class="st">"placebo"</span>, <span class="at">sep =</span> <span class="st">"_"</span>))</span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>  sum</span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>Finally, apply your function to you list of data frames from previous. Use it without specifying your statistic, with specifying your statistic as “var”, “sd”, “min”, and “max”.</li>
@@ -744,38 +747,53 @@ $placebo
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_fun</span>(bp_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> mean_treatment_pre mean_treatment_post mean_treatment_diff    mean_placebo_pre 
-             129.35              112.35               17.00              131.90 
-  mean_placebo_post   mean_placebo_diff 
-             128.90                3.00 </code></pre>
+<pre><code>$mean_treatment
+ mean_treatment_pre mean_treatment_post mean_treatment_diff 
+             129.35              112.35               17.00 
+
+$mean_placebo
+ mean_placebo_pre mean_placebo_post mean_placebo_diff 
+            131.9             128.9               3.0 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_fun</span>(bp_list, <span class="st">"var"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> var_treatment_pre var_treatment_post var_treatment_diff    var_placebo_pre 
-          64.55526           74.76579          153.68421          149.87778 
-  var_placebo_post   var_placebo_diff 
-         124.98889          341.33333 </code></pre>
+<pre><code>$var_treatment
+ var_treatment_pre var_treatment_post var_treatment_diff 
+          64.55526           74.76579          153.68421 
+
+$var_placebo
+ var_placebo_pre var_placebo_post var_placebo_diff 
+        149.8778         124.9889         341.3333 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_fun</span>(bp_list, <span class="st">"sd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> sd_treatment_pre sd_treatment_post sd_treatment_diff    sd_placebo_pre 
-         8.034629          8.646721         12.396944         12.242458 
-  sd_placebo_post   sd_placebo_diff 
-        11.179843         18.475209 </code></pre>
+<pre><code>$sd_treatment
+ sd_treatment_pre sd_treatment_post sd_treatment_diff 
+         8.034629          8.646721         12.396944 
+
+$sd_placebo
+ sd_placebo_pre sd_placebo_post sd_placebo_diff 
+       12.24246        11.17984        18.47521 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_fun</span>(bp_list, <span class="st">"min"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> min_treatment_pre min_treatment_post min_treatment_diff    min_placebo_pre 
-               114                 98                 -5                114 
-  min_placebo_post   min_placebo_diff 
-               105                -21 </code></pre>
+<pre><code>$min_treatment
+ min_treatment_pre min_treatment_post min_treatment_diff 
+               114                 98                 -5 
+
+$min_placebo
+ min_placebo_pre min_placebo_post min_placebo_diff 
+             114              105              -21 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_fun</span>(bp_list, <span class="st">"max"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> max_treatment_pre max_treatment_post max_treatment_diff    max_placebo_pre 
-               141                130                 40                152 
-  max_placebo_post   max_placebo_diff 
-               143                 33 </code></pre>
+<pre><code>$max_treatment
+ max_treatment_pre max_treatment_post max_treatment_diff 
+               141                130                 40 
+
+$max_placebo
+ max_placebo_pre max_placebo_post max_placebo_diff 
+             152              143               33 </code></pre>
 </div>
 </div>
 
